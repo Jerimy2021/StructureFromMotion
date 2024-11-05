@@ -3,33 +3,73 @@ import os
 import sys
 
 def openMVG_main(path):
-    # OpenMVG
+    # Verifica si el directorio proporcionado existe
+    if not os.path.exists(path):
+        print(f"Error: el directorio '{path}' no existe.")
+        sys.exit(1)
 
-    print("Running OpenMVG on " + path + "List of images in the directory")
-    run_cmd = "openMVG_main_SfMInit_ImageListing -i " + path + " -o " + path+"/init -d /Users/pierre/Development/openMVG/src/openMVG/exif/sensor_width_database/sensor_width_camera_database.txt -f 2340"
-    subprocess.call(run_cmd, shell=True)
+    # Verifica y crea los directorios de salida si no existen
+    init_dir = os.path.join(path, "init")
+    matches_dir = os.path.join(path, "matches")
+    reconstruction_dir = os.path.join(path, "reconstruction")
+    os.makedirs(init_dir, exist_ok=True)
+    os.makedirs(matches_dir, exist_ok=True)
+    os.makedirs(reconstruction_dir, exist_ok=True)
+
+    # OpenMVG comandos
+    cmds = [
+        {
+            "description": "Listar imágenes en el directorio",
+            "command": f"openMVG_main_SfMInit_ImageListing -i {path} -o {init_dir} -d /Users/pierre/Development/openMVG/src/openMVG/exif/sensor_width_database/sensor_width_camera_database.txt -f 2340"
+        },
+        {
+            "description": "Calcular características",
+            "command": f"openMVG_main_ComputeFeatures -i {os.path.join(init_dir, 'sfm_data.json')} -o {matches_dir} -m SIFT"
+        },
+        {
+            "description": "Generar pares de coincidencias",
+            "command": f"openMVG_main_PairGenerator -i {os.path.join(init_dir, 'sfm_data.json')} -o {os.path.join(matches_dir, 'pairs.bin')}"
+        },
+        {
+            "description": "Calcular coincidencias",
+            "command": f"openMVG_main_ComputeMatches -i {os.path.join(init_dir, 'sfm_data.json')} -p {os.path.join(matches_dir, 'pairs.bin')} -o {os.path.join(matches_dir, 'matches.putative.bin')}"
+        },
+        {
+            "description": "Filtrar coincidencias geométricas",
+            "command": f"openMVG_main_GeometricFilter -i {os.path.join(init_dir, 'sfm_data.json')} -m {os.path.join(matches_dir, 'matches.putative.bin')} -g f -o {os.path.join(matches_dir, 'matches.f.bin')}"
+        },
+        {
+            "description": "Reconstrucción incremental de estructura",
+            "command": f"openMVG_main_Sfm --sfm_engine INCREMENTAL --input_file {os.path.join(init_dir, 'sfm_data.json')} --match_dir {matches_dir} --output_dir {reconstruction_dir}"
+        },
+        {
+            "description": "Colorizar estructura",
+            "command": f"openMVG_main_ComputeSfM_DataColor -i {os.path.join(reconstruction_dir, 'sfm_data.bin')} -o {os.path.join(reconstruction_dir, 'colorized.ply')}"
+        },
+
+    ]
+    #Comandos no usados
+    # openMVG_main_ComputeStructureFromKnownPoses -i init/sfm_data.json -m matches/ -o matches/robustFitting.json -r 4.0
+    # openMVG_main_ExportUndistortedImages -i init/sfm_data.json -o matches/undistortedImages
+    # openMVG_main_openMVG2openMVS -i reconstruction/sfm_data.bin -d matches/undistortedImages/ -o reconstruction/scene.mvs
+
+
+    for cmd in cmds:
+        print(f"Ejecutando: {cmd['description']}")
+        try:
+            subprocess.run(cmd["command"], shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error al ejecutar {cmd['description']}: {e}")
+            sys.exit(1)
+
+def main():
+    if len(sys.argv) < 2:
+        print("Uso: python script.py <ruta_al_directorio>")
+        sys.exit(1)
     
-    print("Running OpenMVG on " + path + "Compute Features")
-    run_cmd = "openMVG_main_ComputeFeatures -i " + path+"/init/sfm_data.json -o " + path+"/matches -m SIFT"
-    subprocess.call(run_cmd, shell=True)
+    path = sys.argv[1]
+    openMVG_main(path)
 
-    print("Running OpenMVG on " + path + "Compute matching pairs")
-    run_cmd = "openMVG_main_PairGenerator -i " + path+"/init/sfm_data.json -o " + path+"/matches/pairs.bin"
-    subprocess.call(run_cmd, shell=True)
-
-    print("Running OpenMVG on " + path + "Compute Matches")
-    run_cmd = "openMVG_main_ComputeMatches -i " + path+"/init/sfm_data.json -p "+ path+"/matches/pairs.bin -o " + path+"/matches/matches.putative.bin"
-    subprocess.call(run_cmd, shell=True)
-
-    print("Running OpenMVG on " + path + "Compute Geometric Filter matches")
-    run_cmd = "openMVG_main_GeometricFilter -i " + path+"/init/sfm_data.json -m " + path+"/matches/matches.putative.bin -g f -o " + path+"/matches/matches.f.bin"
-    subprocess.call(run_cmd, shell=True)
-
-    print("Running OpenMVG on " + path + "Incremental Structure from Motion")
-    run_cmd = "openMVG_main_Sfm --sfm_engine INCREMENTAL --input_file " + path+"/init/sfm_data.json --match_dir " + path+"/matches/ --output_dir " + path+"/reconstruction"
-    subprocess.call(run_cmd, shell=True)
-
-    print("Colorize Structure from Motion")
-    run_cmd = "openMVG_main_ComputeSfM_DataColor -i " + path+"/reconstruction/sfm_data.bin -o " + path+"/reconstruction/colorized.ply"
-    subprocess.call(run_cmd, shell=True)
+if __name__ == "__main__":
+    main()
 
