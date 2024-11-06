@@ -46,14 +46,20 @@ def openMVG_main(path):
             "description": "Colorizar estructura",
             "command": f"openMVG_main_ComputeSfM_DataColor -i {os.path.join(reconstruction_dir, 'sfm_data.bin')} -o {os.path.join(reconstruction_dir, 'colorized.ply')}"
         },
+        {
+            "description": "Computar structure from known poses",
+            "command": f"openMVG_main_ComputeStructureFromKnownPoses -i {os.path.join(reconstruction_dir, 'sfm_data.bin')} -m {matches_dir} -o {os.path.join(matches_dir, 'robustFitting.json')} -r 4.0"
+        },
+        {
+            "description": "Exportar imágenes sin distorsión",
+            "command": f"openMVG_main_ExportUndistortedImages -i {os.path.join(reconstruction_dir, 'sfm_data.bin')} -o {os.path.join(matches_dir, 'undistortedImages')}"
+        },
+        {
+            "description": "Convertir a formato OpenMVS",
+            "command": f"openMVG_main_openMVG2openMVS -i {os.path.join(reconstruction_dir, 'sfm_data.bin')} -d {os.path.join(matches_dir, 'undistortedImages/')} -o {os.path.join(reconstruction_dir, 'scene.mvs')}"
+        }
 
     ]
-    #Comandos no usados
-    # openMVG_main_ComputeStructureFromKnownPoses -i init/sfm_data.json -m matches/ -o matches/robustFitting.json -r 4.0
-    # openMVG_main_ExportUndistortedImages -i init/sfm_data.json -o matches/undistortedImages
-    # openMVG_main_openMVG2openMVS -i reconstruction/sfm_data.bin -d matches/undistortedImages/ -o reconstruction/scene.mvs
-
-
     for cmd in cmds:
         print(f"Ejecutando: {cmd['description']}")
         try:
