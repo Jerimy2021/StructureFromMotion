@@ -1,6 +1,6 @@
 # StructureFromMotion
 
-Explicare de manera detallada como usar las librerías OpenMVG y OpenMVS para los proyectos de su necesidad.<br>
+Explicare de manera detallada como usar las librerías Colmap, OpenMVG y OpenMVS para los proyectos de su necesidad.<br>
 ![Portada](https://lh3.googleusercontent.com/proxy/Bsv-VPwcmOMYo0J5iP00iZ8jJ44eNotuxGvDogiU0dXgeaTVRL2lbX_Q92fEksYss2Hc2lOtRaRIt0EpY7rq-7c7ng)
 
 ## Especiaciones Tecnicas
@@ -54,3 +54,54 @@ Realiza la reconstrucción incremental (o secuencial) de la estructura 3D de la 
     7. Colorize Structure (openMVG_main_ComputeSfM_DataColor)
 
 Asigna color a la estructura 3D generada. Exporta el archivo colorized.ply, un modelo 3D en formato PLY que contiene puntos de la estructura con color.
+
+## Uso de Colmap SFM
+
+Para poder usar Colmap SFM se debe tener instalado Colmap en la computadora, para instalar Colmap puede seguir los pasos de esta pagina [Colmap](https://colmap.github.io/install.html). Una vez instlado podra usar todas las herramientas necesarias para la reconstruccion 3D.
+Las funciones que puede usar para generar la nube de puntos son las siguientes:
+
+    1. Feature Extraction
+
+Extrae características visuales de las imágenes de entrada. Estas características son puntos clave que se utilizarán para emparejar las imágenes y reconstruir la escena en 3D.
+
+    2. Feature Matching
+
+Encuentra coincidencias entre las características extraídas de las imágenes. Estas coincidencias se utilizan para calcular la estructura 3D de la escena.
+
+    3. Incremental/Sequential Structure-from-Motion
+
+Realiza la reconstrucción incremental (o secuencial) de la estructura 3D de la escena. Utiliza las coincidencias de características y los parámetros de cámara para construir la estructura tridimensional.
+
+    4. Global Structure-from-Motion
+
+Realiza la reconstrucción global de la estructura 3D de la escena. Utiliza todas las imágenes de entrada para calcular la estructura tridimensional de la escena.
+
+## Uso de OpenMVS
+
+Para poder usar OpenMVS se debe tener instalado OpenMVS en la computadora, para instalar OpenMVS puede seguir los pasos de esta pagina [OpenMVS](https://hackmd.io/@weichenpai/S126TudDn). Una vez instlado podra usar todas las herramientas necesarias para la reconstruccion 3D.
+
+Las funciones que puede usar para generar la malla 3D son las siguientes:
+
+    1. Densify Point Cloud
+
+Genera una nube de puntos densa a partir de la nube de puntos generada en el paso anterior. Utiliza la información de las imágenes y la nube de puntos para calcular la posición tridimensional de los puntos de la escena.
+
+    2. Mesh Reconstruction
+
+Genera una malla 3D a partir de la nube de puntos densa. Utiliza la información de la nube de puntos para construir una malla tridimensional que representa la forma de la escena.
+
+    3. Refine Mesh
+
+Refina la malla 3D generada en el paso anterior. Utiliza algoritmos de optimización para mejorar la calidad de la malla y eliminar artefactos.
+
+    4. Texture Mapping
+
+Mapea texturas a la malla 3D generada. Utiliza las imágenes de entrada para asignar texturas a la malla, creando un modelo 3D texturizado.
+
+## ¿Cómo generar la malla de un conjunto de fotos?
+
+Este trabajo se ve enfocado en eso que alguien que dese usar las librerias OpenMVG, OpenMVS y Colmap pueda hacerlo de manera sencilla, por lo que se ha creado un script de python que permite generar la malla 3D de un conjunto de fotos, solo debe pasar la ruta a las imagenes y el script se encargara de hacer todo el proceso.
+En el script de python de nombre Colmap.py se encuentra el script para generar la nube de puntos a partir de un conjunto de imagenes, solo debe pasar la ruta a las imagenes. En el archivo de nombre OpenMVS.py se encuentra el script para generar la malla 3D a partir de la nube de puntos generada en el paso anterior, solo debe pasar la ruta del proyecto generado del anterior paso.
+
+Muchas gracias por leer este documento, espero que les haya sido de ayuda y que puedan usar las librerias OpenMVG, OpenMVS y Colmap, para sus proyectos de necesidad.
+:)
