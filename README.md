@@ -98,6 +98,87 @@ Refina la malla 3D generada en el paso anterior. Utiliza algoritmos de optimizac
 
 Mapea texturas a la malla 3D generada. Utiliza las imágenes de entrada para asignar texturas a la malla, creando un modelo 3D texturizado.
 
+## ¿Cómo reconstruir el proyecto con el Dockerfile del proyecto?
+
+En el proyecto se encuentra un archivo de nombre Dockerfile, este archivo contiene las instrucciones necesarias para crear una imagen de docker con todas las librerias necesarias para poder ejecutar los scripts de python de OpenMVG, OpenMVS y Colmap. Para poder crear la imagen de docker se debe ejecutar el siguiente comando en la terminal:
+
+```bash
+docker run -it --rm \
+    -v /path/to/imagenes:/app/images \
+    my_project_image
+```
+
+En esta parte del comando se debe cambiar /path/to/imagenes por la ruta a las imagenes que se desean usar para la reconstruccion 3D, y my_project_image por el nombre que se le desea dar a la imagen de docker. Una vez ejecutado el comando se creara la imagen de docker con todas las librerias necesarias para poder ejecutar los scripts de python de OpenMVG, OpenMVS y Colmap.
+se ejecutara automaticamente el archivo de python apy.py debera indicar la ruta donde se encuentra las imagenes, la carpeta images es donde se encontrara las imagenes no cambiar este nombre **images** porque el script de python esta configurado para buscar las imagenes en esa carpeta, si desea montar el proyecto donde se ejecutara poner el nombre del proyecto dentro de app/<name_project> y dentro de esa carpeta poner la carpeta images con las imagenes.
+La estructura del proyecto debe ser la siguiente:
+
+```bash
+app/
+    images/
+        image1.jpg
+        image2.jpg
+        ...
+    OpenMVG.py
+    OpenMVS.py
+    Colmap.py
+    app.py
+```
+
+o si desea montar el proyecto en una carpeta diferente a app, la estructura del proyecto debe ser la siguiente:
+
+```bash
+app/
+    <name_project>/
+        images/
+            image1.jpg
+            image2.jpg
+            ...
+    OpenMVG.py
+    OpenMVS.py
+    Colmap.py
+    app.py
+```
+
+El proyecto se creara en la carpeta app/<name_project> con los archivos generados por los scripts de python de OpenMVG, OpenMVS y Colmap, para ejecutar este ultimo con docker sera asi:
+
+```bash
+docker run -it --rm \
+    -v /path/to/project:/app/<name_project> \
+    my_project_image
+```
+
+Para ingresar al contenedor de docker se debe ejecutar el siguiente comando en la terminal:
+
+```bash
+docker images
+```
+
+Este comando mostrara una lista con todas las imagenes de docker que se han creado, se debe buscar la imagen que se creo con el comando anterior y copiar el id de la imagen, una vez copiado el id se debe ejecutar el siguiente comando en la terminal:
+
+```bash
+docker run -it my_project_image bash
+```
+
+si el contenedor ya esta creado se puede ingresar con el siguiente comando:
+
+```bash
+docker exec -it <container_id> bash
+```
+
+Para hacer las pruebas de los scripts de python de OpenMVG, OpenMVS y Colmap se debe ejecutar el siguiente comando en la terminal:
+
+```bash
+curl -X POST http://localhost:5000/run_colmap -H "Content-Type: application/json" -d '{"project_path": "/app/<name_project>"}'
+```
+
+Que significa que se debe hacer una peticion POST a la url http://localhost:5000/run_colmap con el parametro project_path que es la ruta al proyecto que se desea reconstruir, en este caso se debe cambiar /app/<name_project> por la ruta al proyecto que se desea reconstruir.
+
+Luego de ejecutar el comando anterior se generara la malla 3D del proyecto en la carpeta app/<name_project> con los archivos generados por los scripts de python de OpenMVG, OpenMVS y Colmap.
+
+```bash
+curl -X POST http://localhost:5000/run_openmvs -H "Content-Type: application/json" -d '{"project_path": "/app/<name_project>"}'
+```
+
 ## ¿Cómo generar la malla de un conjunto de fotos?
 
 Este trabajo se ve enfocado en eso que alguien que dese usar las librerias OpenMVG, OpenMVS y Colmap pueda hacerlo de manera sencilla, por lo que se ha creado un script de python que permite generar la malla 3D de un conjunto de fotos, solo debe pasar la ruta a las imagenes y el script se encargara de hacer todo el proceso.
