@@ -3,7 +3,7 @@
 Explicare de manera detallada como usar las librerías Colmap, OpenMVG y OpenMVS para los proyectos de su necesidad.<br>
 ![Portada](https://lh3.googleusercontent.com/proxy/Bsv-VPwcmOMYo0J5iP00iZ8jJ44eNotuxGvDogiU0dXgeaTVRL2lbX_Q92fEksYss2Hc2lOtRaRIt0EpY7rq-7c7ng)
 
-## Especiaciones Tecnicas
+## Especificaciones Técnicas
 
 Para poder ejecutar los proyectos de OpenMVG y OpenMVS, se debe tener una computadora con las siguientes características:
 
@@ -11,19 +11,19 @@ Para poder ejecutar los proyectos de OpenMVG y OpenMVS, se debe tener una comput
 -   Memoria RAM: 32 GB o superior
 -   Sistema Operativo: Ubuntu 18.04 o superior
 -   Espacio en Disco: 1 TB o superior
--   Tener disponibilidad de gpu para el uso de OpenMVS(laptop con cuda para OpenMVS).
+-   Tener disponibilidad de GPU para el uso de OpenMVS(laptop con cuda para OpenMVS).
 
 ## Instalación de OpenMVG
 
-Para instalar OpenMVG puede seguir los pasos de esta pagina [OpenMVG](https://github.com/openMVG/openMVG/blob/develop/BUILD.md)
+Para instalar OpenMVG puede seguir los pasos de esta página [OpenMVG](https://github.com/openMVG/openMVG/blob/develop/BUILD.md)
 
 ## Instalación de OpenMVS
 
-Para instalar OpenMVS puede seguir los pasos de esta pagina [OpenMVS](https://hackmd.io/@weichenpai/S126TudDn) en este link tambien se encuentra informacion de como instalar OpenMVG, en caso de tener porblemas con la instalacion de la primera parte.
+Para instalar OpenMVS puede seguir los pasos de esta página [OpenMVS](https://hackmd.io/@weichenpai/S126TudDn) en este link también se encuentra información de como instalar OpenMVG, en caso de tener porblemas con la instalación de la primera parte.
 
 ## Uso de OpenMVG
 
-En el script de python de nombre OpenMVG.py se encuentra el script para generar una nube de puntos a partir de un conjunto de imagenes, solo debe pasar la ruta a las imagenes.
+En el script de python de nombre OpenMVG.py se encuentra el script para generar una nube de puntos a partir de un conjunto de imágenes, solo debe pasar la ruta a las imágenes.
 
 Las funciones de OpenMVG para generar la nube de puntos es la siguiente:
 
@@ -57,7 +57,7 @@ Asigna color a la estructura 3D generada. Exporta el archivo colorized.ply, un m
 
 ## Uso de Colmap SFM
 
-Para poder usar Colmap SFM se debe tener instalado Colmap en la computadora, para instalar Colmap puede seguir los pasos de esta pagina [Colmap](https://colmap.github.io/install.html). Una vez instlado podra usar todas las herramientas necesarias para la reconstruccion 3D.
+Para poder usar Colmap SFM se debe tener instalado Colmap en la computadora, para instalar Colmap puede seguir los pasos de esta página [Colmap](https://colmap.github.io/install.html). Una vez instalado podrá usar todas las herramientas necesarias para la reconstrucción 3D.
 Las funciones que puede usar para generar la nube de puntos son las siguientes:
 
     1. Feature Extraction
@@ -78,7 +78,7 @@ Realiza la reconstrucción global de la estructura 3D de la escena. Utiliza toda
 
 ## Uso de OpenMVS
 
-Para poder usar OpenMVS se debe tener instalado OpenMVS en la computadora, para instalar OpenMVS puede seguir los pasos de esta pagina [OpenMVS](https://hackmd.io/@weichenpai/S126TudDn). Una vez instlado podra usar todas las herramientas necesarias para la reconstruccion 3D.
+Para poder usar OpenMVS se debe tener instalado OpenMVS en la computadora, para instalar OpenMVS puede seguir los pasos de esta página [OpenMVS](https://hackmd.io/@weichenpai/S126TudDn). Una vez instalado podrá usar todas las herramientas necesarias para la reconstruccion 3D.
 
 Las funciones que puede usar para generar la malla 3D son las siguientes:
 
@@ -108,8 +108,8 @@ docker run -it --rm \
     my_project_image
 ```
 
-En esta parte del comando se debe cambiar /path/to/imagenes por la ruta a las imagenes que se desean usar para la reconstruccion 3D, y my_project_image por el nombre que se le desea dar a la imagen de docker. Una vez ejecutado el comando se creara la imagen de docker con todas las librerias necesarias para poder ejecutar los scripts de python de OpenMVG, OpenMVS y Colmap.
-se ejecutara automaticamente el archivo de python apy.py debera indicar la ruta donde se encuentra las imagenes, la carpeta images es donde se encontrara las imagenes no cambiar este nombre **images** porque el script de python esta configurado para buscar las imagenes en esa carpeta, si desea montar el proyecto donde se ejecutara poner el nombre del proyecto dentro de app/<name_project> y dentro de esa carpeta poner la carpeta images con las imagenes.
+En esta parte del comando se debe cambiar /path/to/imagenes por la ruta a las imágenes que se desean usar para la reconstrucción 3D, y my_project_image por el nombre que se le desea dar a la imagen de docker. Una vez ejecutado el comando se creara la imagen de docker con todas las librerias necesarias para poder ejecutar los scripts de python de OpenMVG, OpenMVS y Colmap.
+se ejecutará automáticamente el archivo de python apy.py debera indicar la ruta donde se encuentra las imágenes, la carpeta images es donde se encontrara las imágenes no cambiar este nombre **images** porque el script de python esta configurado para buscar las imágenes en esa carpeta, si desea montar el proyecto donde se ejecutara poner el nombre del proyecto dentro de app/<name_project> y dentro de esa carpeta poner la carpeta images con las imágenes.
 La estructura del proyecto debe ser la siguiente:
 
 ```bash
@@ -139,7 +139,7 @@ app/
     app.py
 ```
 
-El proyecto se creara en la carpeta app/<name_project> con los archivos generados por los scripts de python de OpenMVG, OpenMVS y Colmap, para ejecutar este ultimo con docker sera asi:
+El proyecto se creara en la carpeta app/<name_project> con los archivos generados por los scripts de python de OpenMVG, OpenMVS y Colmap, para ejecutar este último con docker sera asi:
 
 ```bash
 docker run -it --rm \
@@ -153,13 +153,13 @@ Para ingresar al contenedor de docker se debe ejecutar el siguiente comando en l
 docker images
 ```
 
-Este comando mostrara una lista con todas las imagenes de docker que se han creado, se debe buscar la imagen que se creo con el comando anterior y copiar el id de la imagen, una vez copiado el id se debe ejecutar el siguiente comando en la terminal:
+Este comando mostrará una lista con todas las imágenes de docker que se han creado, se debe buscar la imagen que se creo con el comando anterior y copiar el id de la imagen, una vez copiado el id se debe ejecutar el siguiente comando en la terminal:
 
 ```bash
 docker run -it my_project_image bash
 ```
 
-si el contenedor ya esta creado se puede ingresar con el siguiente comando:
+si el contenedor ya está creado se puede ingresar con el siguiente comando:
 
 ```bash
 docker exec -it <container_id> bash
@@ -181,8 +181,8 @@ curl -X POST http://localhost:5000/run_openmvs -H "Content-Type: application/jso
 
 ## ¿Cómo generar la malla de un conjunto de fotos?
 
-Este trabajo se ve enfocado en eso que alguien que dese usar las librerias OpenMVG, OpenMVS y Colmap pueda hacerlo de manera sencilla, por lo que se ha creado un script de python que permite generar la malla 3D de un conjunto de fotos, solo debe pasar la ruta a las imagenes y el script se encargara de hacer todo el proceso.
-En el script de python de nombre Colmap.py se encuentra el script para generar la nube de puntos a partir de un conjunto de imagenes, solo debe pasar la ruta a las imagenes. En el archivo de nombre OpenMVS.py se encuentra el script para generar la malla 3D a partir de la nube de puntos generada en el paso anterior, solo debe pasar la ruta del proyecto generado del anterior paso.
+Este trabajo se ve enfocado en eso que alguien que dese usar las librerias OpenMVG, OpenMVS y Colmap pueda hacerlo de manera sencilla, por lo que se ha creado un script de python que permite generar la malla 3D de un conjunto de fotos, solo debe pasar la ruta a las imágenes y el script se encargará de hacer todo el proceso.
+En el script de python de nombre Colmap.py se encuentra el script para generar la nube de puntos a partir de un conjunto de imágenes, solo debe pasar la ruta a las imágenes. En el archivo de nombre OpenMVS.py se encuentra el script para generar la malla 3D a partir de la nube de puntos generada en el paso anterior, solo debe pasar la ruta del proyecto generado del anterior paso.
 
-Muchas gracias por leer este documento, espero que les haya sido de ayuda y que puedan usar las librerias OpenMVG, OpenMVS y Colmap, para sus proyectos de necesidad.
+Muchas gracias por leer este documento, espero que les haya sido de ayuda y que puedan usar las librerías OpenMVG, OpenMVS y Colmap, para sus proyectos de necesidad.
 :)
