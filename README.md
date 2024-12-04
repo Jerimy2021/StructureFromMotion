@@ -17,9 +17,12 @@ Para poder ejecutar los proyectos de OpenMVG y OpenMVS, se debe tener una comput
 
 Para instalar OpenMVS puede seguir los pasos de esta página [OpenMVS](https://hackmd.io/@weichenpai/S126TudDn) en este link también se encuentra información de como instalar OpenMVG, en caso de tener problemas con la instalación de la primera parte.
 
+## Instalación de Colmap
+
+Para instalar Colmap puede seguir los pasos de esta página [Colmap](https://colmap.github.io/install.html). 
+
 ## Uso de Colmap SFM
 
-Para poder usar Colmap SFM se debe tener instalado Colmap en la computadora, para instalar Colmap puede seguir los pasos de esta página [Colmap](https://colmap.github.io/install.html). Una vez instalado podrá usar todas las herramientas necesarias para la reconstrucción 3D.
 Las funciones que puede usar para generar la nube de puntos son las siguientes:
 
     1. Feature Extraction
@@ -62,7 +65,9 @@ Mapea texturas a la malla 3D generada. Utiliza las imágenes de entrada para asi
 
 ## ¿Cómo reconstruir el proyecto con el Dockerfile del proyecto?
 
-En el proyecto se encuentra un archivo de nombre Dockerfile, este archivo contiene las instrucciones necesarias para crear una imagen de docker con todas las librerias necesarias para poder ejecutar los scripts de python de OpenMVG, OpenMVS y Colmap. Para poder crear la imagen de docker se debe ejecutar el siguiente comando en la terminal:
+Antes de usar el Dockerfile usted debera crear una carpeta vacia con el nombre de su proyecto y luego crear una carpeta de nombre images dentro con las imagenes del video. Para crear las imagenes del video puede usar ffmpeg o usar el script de python de nombre GenerateImages.py en la carpeta app, aqui tendra que cambiar el nombre de la ruta del video y donde se encontraran las imagenes creadas por el script de python,  usar la descripcion de ¿Como usar el Dockerfile? Para entender el orden como se debe tener las imagenes.
+
+Una vez realizado esto ya estamos listos para generar nuestro proyecto con OpenMVS y colmap. En el proyecto se encuentra un archivo de nombre Dockerfile, este archivo contiene las instrucciones necesarias para crear una imagen de docker con todas las librerias necesarias para poder ejecutar los scripts de python de OpenMVS y Colmap. Para poder crear la imagen de docker se debe ejecutar el siguiente comando en la terminal:
 
 ```bash
 docker run -it --rm \
@@ -71,6 +76,7 @@ docker run -it --rm \
 ```
 
 En esta parte del comando se debe cambiar /path/to/imagenes por la ruta a las imágenes que se desean usar para la reconstrucción 3D, y my_project_image por el nombre que se le desea dar a la imagen de docker. Una vez ejecutado el comando se creara la imagen de docker con todas las librerias necesarias para poder ejecutar los scripts de python de OpenMVG, OpenMVS y Colmap.
+
 se ejecutará automáticamente el archivo de python apy.py debera indicar la ruta donde se encuentra las imágenes, la carpeta images es donde se encontrara las imágenes no cambiar este nombre **images** porque el script de python esta configurado para buscar las imágenes en esa carpeta, si desea montar el proyecto donde se ejecutara poner el nombre del proyecto dentro de app/<name_project> y dentro de esa carpeta poner la carpeta images con las imágenes.
 La estructura del proyecto debe ser la siguiente:
 
@@ -85,8 +91,9 @@ app/
     Colmap.py
     app.py
 ```
+En esta opcion se crea la carpeta images dentro de la carpeta app/ no es lo recomendable, pero funciona de igual manera pero todos los archivos generados se guardaran en esta parte de la imagen de docker.
 
-o si desea montar el proyecto en una carpeta diferente a app, la estructura del proyecto debe ser la siguiente:
+Otra opcion es si desea montar el proyecto en una carpeta diferente a app, la estructura del proyecto debe ser la siguiente:
 
 ```bash
 app/
